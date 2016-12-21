@@ -60,7 +60,7 @@ def kepFlux(sdsslc_r,sdsslc_g):
                 print sdss_g[m], sdss_t[i], len(sdss_t),len(sdsslc_r.t)
             if len(sdss_r) == len(sdss_g):
                 break
-    c = pow(sdss_r, 0.2) + pow(sdss_g,0.8)
+    c = pow(sdss_r, 0.8) + pow(sdss_g,0.2)
     fullr = np.where(sdss_g == 0.)[0]
     c[fullr] = sdss_r[fullr]
     print(c[fullr],sdss_r[fullr-1])
@@ -69,16 +69,10 @@ def kepFlux(sdsslc_r,sdsslc_g):
     	#c_err[i] = np.maximum(sdsslc_r.yerr[i], sdss_gerr[i])
     	
     	#compute error by adding in quadrature
-    	thing1 = 0.2*sdss_r**(-0.8)
-    	thing2 = 0.8*sdss_g**(-0.2)
-    	c_err = np.sqrt( (thing1**2 * sdsslc_r.yerr**2) + (thing2**2 * sdss_gerr**2))
-    	
-    	
-    	
-    	
-    	
-    	
-    	#c_err = pow(sdsslc_r.yerr, 0.2) + pow(sdss_gerr,0.8)
+    	thing1 = 0.8*sdss_r**(-0.2)
+    	thing2 = 0.2*sdss_g**(-0.8)
+    	c_err = np.sqrt( (thing1**2. * sdsslc_r.yerr**2.) + (thing2**2. * sdss_gerr**2.))
+
     c_t = sdss_t
     #return 0,0,0                   
     return c, c_err, c_t
@@ -180,7 +174,7 @@ print("the average flux is %d",c_med)
 
 
 full_lcy = c_norm
-full_lcyerr = c_err
+full_lcyerr = c_err/c_med
 full_lct = c_t
 w = np.where(full_lcy > 0)[0]
 #compare time attibutes in sdss and k2 objects from kali
